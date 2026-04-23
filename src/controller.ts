@@ -78,26 +78,31 @@ function applyInstruction(state: RobotState, instruction: Command, marsGrid: Mar
                 ...state,
                 direction: turnRight(state.direction)
             };
-            case 'F': {
-                const newState = moveForward(state);
+        case 'F': {
+            const newState = moveForward(state);
 
-                if (!isOutOfBounds(newState, marsGrid)) {
-                    return newState;
-                }
-
-                const scentKey = getScentKey(state);
-
-                if (scents.has(scentKey)) {
-                    return state;
-                }
-
-                scents.add(scentKey);
-
-                return {
-                    ...state,
-                    lost: true
-                };
+            if (!isOutOfBounds(newState, marsGrid)) {
+                return newState;
             }
+
+            const scentKey = getScentKey(state);
+
+            if (scents.has(scentKey)) {
+                return state;
+            }
+
+            scents.add(scentKey);
+
+            return {
+                ...state,
+                lost: true
+            };
+        }
     }
+}
+
+export function formatOutput(state: RobotState): string {
+    const output = `${state.x} ${state.y} ${state.direction}`;
+    return state.lost ? `${output} LOST` : output;
 }
 

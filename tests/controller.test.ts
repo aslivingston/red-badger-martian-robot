@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { moveForward, controlRobot, turnLeft, turnRight, isOutOfBounds } from '../src/controller.js';
+import { moveForward, controlRobot, turnLeft, turnRight, isOutOfBounds, formatOutput } from '../src/controller.js';
 
 describe('turnLeft', () => {
     it('turns north to west', () => {
@@ -11,6 +11,7 @@ describe('turnLeft', () => {
     });
 });
 
+
 describe('turnRight', () => {
     it('turns north to east', () => {
         expect(turnRight('N')).toBe('E');
@@ -20,6 +21,7 @@ describe('turnRight', () => {
         expect(turnRight('W')).toBe('N');
     });
 });
+
 
 describe('moveForward', () => {
     it('moves north by increasing y', () => {
@@ -41,6 +43,7 @@ describe('moveForward', () => {
     });
 });
 
+
 describe ('isOutOfBounds', () => {
     const marsGrid = { maxX: 5, maxY: 3 };
 
@@ -56,6 +59,7 @@ describe ('isOutOfBounds', () => {
         expect(isOutOfBounds({ x: 2, y: 2, direction: 'N', lost: false }, marsGrid)).toBe(false);
     });
 });
+
 
 describe('controlRobot', () => {
     const marsGrid = { maxX: 5, maxY: 3 };
@@ -110,6 +114,7 @@ describe('controlRobot', () => {
     });
 });
 
+
 describe('scent tracking', () => {
     const world = { maxX: 5, maxY: 3 };
 
@@ -151,5 +156,29 @@ describe('scent tracking', () => {
             lost: false
         });
     });
+});
 
+
+describe('formatOutput', () => {
+    it('formats a robot that is not lost', () => {
+        expect(
+            formatOutput({
+                x: 1,
+                y: 1,
+                direction: 'E',
+                lost: false
+            })
+        ).toBe('1 1 E');
+    });
+
+    it('formats a lost robot', () => {
+        expect(
+            formatOutput({
+                x: 3,
+                y: 3,
+                direction: 'N',
+                lost: true
+            })
+        ).toBe('3 3 N LOST');
+    });
 });
