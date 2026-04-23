@@ -1,0 +1,1 @@
+console.log('Martian Robots CLI');
