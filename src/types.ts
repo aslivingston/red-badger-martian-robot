@@ -17,3 +17,9 @@ export interface ParsedInput {
     marsGrid: MarsGrid;
     robots: RobotInput[];
 }
+
+export interface RobotState {
+    x: number;
+    y: number;
+    direction: Direction;
+}

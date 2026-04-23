@@ -1,4 +1,5 @@
 import { parseInput } from './parseInput.js';
+import { controlRobot } from './controller.js';
 
 const sampleInput = 
     `5 3
@@ -11,4 +12,7 @@ const sampleInput =
 
 const parsed = parseInput(sampleInput);
 
-console.log(parsed);
+for (const robot of parsed.robots) {
+    const result = controlRobot(robot);
+    console.log(result);
+}
