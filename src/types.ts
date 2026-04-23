@@ -24,3 +24,5 @@ export interface RobotState {
     direction: Direction;
     lost: boolean;
 }
+
+export type ScentMap = Set<string>;

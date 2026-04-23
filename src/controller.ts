@@ -1,4 +1,4 @@
-import type { Command, Direction, RobotInput, RobotState, MarsGrid } from './types.js';
+import type { Command, Direction, RobotInput, RobotState, MarsGrid, ScentMap } from './types.js';
 
 export function turnLeft(direction: Direction): Direction {
     switch (direction) {
@@ -43,7 +43,11 @@ export function isOutOfBounds(state: RobotState, marsGrid: MarsGrid): boolean {
     return state.x < 0 || state.x > marsGrid.maxX || state.y < 0 || state.y > marsGrid.maxY;
 }
 
-export function controlRobot(robot: RobotInput, marsGrid: MarsGrid): RobotState {
+export function getScentKey(state: RobotState): string {
+    return `${state.x},${state.y},${state.direction}`;
+}
+
+export function controlRobot(robot: RobotInput, marsGrid: MarsGrid, scents: ScentMap = new Set()): RobotState {
     let state: RobotState = {
         x: robot.x,
         y: robot.y,
@@ -56,13 +60,13 @@ export function controlRobot(robot: RobotInput, marsGrid: MarsGrid): RobotState 
             break;
         }
 
-        state = applyInstruction(state, instruction, marsGrid);
+        state = applyInstruction(state, instruction, marsGrid, scents);
     }
 
     return state;
 }
 
-function applyInstruction(state: RobotState, instruction: Command, marsGrid: MarsGrid): RobotState {
+function applyInstruction(state: RobotState, instruction: Command, marsGrid: MarsGrid, scents: ScentMap): RobotState {
     switch (instruction) {
         case 'L':
             return {
@@ -74,18 +78,26 @@ function applyInstruction(state: RobotState, instruction: Command, marsGrid: Mar
                 ...state,
                 direction: turnRight(state.direction)
             };
-        case 'F': {
-            const newState = moveForward(state);
+            case 'F': {
+                const newState = moveForward(state);
 
-            if (isOutOfBounds(newState, marsGrid)) {
+                if (!isOutOfBounds(newState, marsGrid)) {
+                    return newState;
+                }
+
+                const scentKey = getScentKey(state);
+
+                if (scents.has(scentKey)) {
+                    return state;
+                }
+
+                scents.add(scentKey);
+
                 return {
                     ...state,
                     lost: true
                 };
             }
-
-            return newState;
-        }
     }
 }
 

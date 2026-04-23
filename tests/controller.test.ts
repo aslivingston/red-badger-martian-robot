@@ -109,3 +109,47 @@ describe('controlRobot', () => {
         });
     });
 });
+
+describe('scent tracking', () => {
+    const world = { maxX: 5, maxY: 3 };
+
+    it('adds a scent when a robot is lost', () => {
+        const scents = new Set<string>();
+
+        controlRobot(
+        {
+            x: 3,
+            y: 3,
+            direction: 'N',
+            instructions: ['F']
+        },
+        world,
+        scents
+        );
+
+        expect(scents.has('3,3,N')).toBe(true);
+    });
+
+    it('ignores a dangerous move when a matching scent exists', () => {
+        const scents = new Set<string>(['3,3,N']);
+
+        const result = controlRobot(
+        {
+            x: 3,
+            y: 3,
+            direction: 'N',
+            instructions: ['F', 'R', 'F']
+        },
+        world,
+        scents
+        );
+
+        expect(result).toEqual({
+            x: 4,
+            y: 3,
+            direction: 'E',
+            lost: false
+        });
+    });
+
+});

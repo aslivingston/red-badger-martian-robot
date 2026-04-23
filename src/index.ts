@@ -1,5 +1,6 @@
 import { parseInput } from './parseInput.js';
 import { controlRobot } from './controller.js';
+import { ScentMap } from './types.js';
 
 const sampleInput = 
     `5 3
@@ -11,8 +12,9 @@ const sampleInput =
     LLFFFLFLFL`;
 
 const parsed = parseInput(sampleInput);
+const scents: ScentMap = new Set();
 
 for (const robot of parsed.robots) {
-    const result = controlRobot(robot, parsed.marsGrid);
+    const result = controlRobot(robot, parsed.marsGrid, scents);
     console.log(result);
 }
