@@ -1,4 +1,4 @@
-import type { Command, Direction, RobotInput, RobotState } from './types.js';
+import type { Command, Direction, RobotInput, RobotState, MarsGrid } from './types.js';
 
 export function turnLeft(direction: Direction): Direction {
     switch (direction) {
@@ -39,21 +39,30 @@ export function moveForward(state: RobotState): RobotState {
     }
 }
 
-export function controlRobot(robot: RobotInput): RobotState {
+export function isOutOfBounds(state: RobotState, marsGrid: MarsGrid): boolean {
+    return state.x < 0 || state.x > marsGrid.maxX || state.y < 0 || state.y > marsGrid.maxY;
+}
+
+export function controlRobot(robot: RobotInput, marsGrid: MarsGrid): RobotState {
     let state: RobotState = {
         x: robot.x,
         y: robot.y,
-        direction: robot.direction
+        direction: robot.direction,
+        lost: false
     };
 
     for (const instruction of robot.instructions) {
-        state = applyInstruction(state, instruction);
+        if (state.lost) {
+            break;
+        }
+
+        state = applyInstruction(state, instruction, marsGrid);
     }
 
     return state;
 }
 
-function applyInstruction(state: RobotState, instruction: Command): RobotState {
+function applyInstruction(state: RobotState, instruction: Command, marsGrid: MarsGrid): RobotState {
     switch (instruction) {
         case 'L':
             return {
@@ -65,7 +74,18 @@ function applyInstruction(state: RobotState, instruction: Command): RobotState {
                 ...state,
                 direction: turnRight(state.direction)
             };
-        case 'F':
-            return moveForward(state);
+        case 'F': {
+            const newState = moveForward(state);
+
+            if (isOutOfBounds(newState, marsGrid)) {
+                return {
+                    ...state,
+                    lost: true
+                };
+            }
+
+            return newState;
+        }
     }
 }
+

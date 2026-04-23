@@ -22,4 +22,5 @@ export interface RobotState {
     x: number;
     y: number;
     direction: Direction;
+    lost: boolean;
 }

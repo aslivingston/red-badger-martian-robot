@@ -13,6 +13,6 @@ const sampleInput =
 const parsed = parseInput(sampleInput);
 
 for (const robot of parsed.robots) {
-    const result = controlRobot(robot);
+    const result = controlRobot(robot, parsed.marsGrid);
     console.log(result);
 }
