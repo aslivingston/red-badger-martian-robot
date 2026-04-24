@@ -1,4 +1,5 @@
 import type { Command, Direction, RobotInput, RobotState, MarsGrid, ScentMap } from './types.js';
+import { parseInput } from './parseInput.js';
 
 export function turnLeft(direction: Direction): Direction {
     switch (direction) {
@@ -104,5 +105,15 @@ function applyInstruction(state: RobotState, instruction: Command, marsGrid: Mar
 export function formatOutput(state: RobotState): string {
     const output = `${state.x} ${state.y} ${state.direction}`;
     return state.lost ? `${output} LOST` : output;
+}
+
+export function runSimulation(input: string): string {
+    const parsed = parseInput(input);
+    const scents: ScentMap = new Set();
+
+    return parsed.robots
+        .map((robot) => controlRobot(robot, parsed.marsGrid, scents))
+        .map(formatOutput)
+        .join('\n');
 }
 

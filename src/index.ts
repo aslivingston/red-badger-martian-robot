@@ -1,6 +1,4 @@
-import { parseInput } from './parseInput.js';
-import { controlRobot, formatOutput } from './controller.js';
-import { ScentMap } from './types.js';
+import { runSimulation } from './controller.js';
 
 const sampleInput = 
     `5 3
@@ -11,10 +9,4 @@ const sampleInput =
     0 3 W
     LLFFFLFLFL`;
 
-const parsed = parseInput(sampleInput);
-const scents: ScentMap = new Set();
-
-for (const robot of parsed.robots) {
-    const result = controlRobot(robot, parsed.marsGrid, scents);
-    console.log(formatOutput(result));
-}
+console.log(runSimulation(sampleInput));
