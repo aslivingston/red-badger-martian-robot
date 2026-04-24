@@ -1,6 +1,6 @@
 # red-badger-martian-robot
 
-## Problem: Martian Robots
+## Martian Robots
 
 ### The Problem
 
@@ -63,6 +63,16 @@ For each robot, output:
 
 ---
 
+### Tech Choices
+
+I used TypeScript because it keeps the robot state, directions, commands and parsed input clearly typed, which helps make the solution easier to read and maintain.
+
+A function based solution was chosen as it helps with readability and made it easier to test. 
+
+I kept the solution intentionally simple with separate concerns. 
+
+---
+
 ### Instructions
 
 Install dependencies 
@@ -78,27 +88,22 @@ Run tests
 
 ### Solution
 
-1. Parsing
-Parse input into structured data:
+1. Parsing Input: validating input into structured data:
 - grid boundaries
 - robot definitions
 
-2. Controller
-Each robot is processed:
+2. Controller: Each robot is processed:
 - instructions are applied one at a time
 - turning and movement handling implemented
 
-3. Boundary Handling
-Forward moves are checked before being applied:
+3. Boundary Handling: Forward moves are checked before being applied:
 if inside bounds → move
 if outside bounds → evaluate scent logic
 
-4. Scent Tracking
-Scents are stored as a Set of keys:
+4. Scent Tracking: Scents are stored as a Set of keys:
 - x,y,direction
 
-5. Output Formatting
-Final robot states are converted into the required output format:
+5. Output Formatting: Final robot states are converted into the required output format:
 - x y direction [LOST]
 
 ---
