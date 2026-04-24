@@ -65,6 +65,40 @@ For each robot, output:
 
 ### Instructions
 
-- npm install
-- npm run dev
-- npm test
+Install dependencies 
+```npm install```
+
+Run program
+```npm run dev```
+
+Run tests
+```npm test```
+
+---
+
+### Solution
+
+1. Parsing
+Parse input into structured data:
+- grid boundaries
+- robot definitions
+
+2. Controller
+Each robot is processed:
+- instructions are applied one at a time
+- turning and movement handling implemented
+
+3. Boundary Handling
+Forward moves are checked before being applied:
+if inside bounds → move
+if outside bounds → evaluate scent logic
+
+4. Scent Tracking
+Scents are stored as a Set of keys:
+- x,y,direction
+
+5. Output Formatting
+Final robot states are converted into the required output format:
+- x y direction [LOST]
+
+---
