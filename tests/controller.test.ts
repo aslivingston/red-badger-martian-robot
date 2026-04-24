@@ -112,11 +112,30 @@ describe('controlRobot', () => {
             lost: true
         });
     });
+
+    it('stops processing instructions after the robot is lost', () => {
+        const result = controlRobot(
+            {
+                x: 5,
+                y: 3,
+                direction: 'N',
+                instructions: ['F', 'R', 'F']
+            },
+            marsGrid
+        );
+
+        expect(result).toEqual({
+            x: 5,
+            y: 3,
+            direction: 'N',
+            lost: true
+        });
+    });
 });
 
 
 describe('scent tracking', () => {
-    const world = { maxX: 5, maxY: 3 };
+    const marsGrid = { maxX: 5, maxY: 3 };
 
     it('adds a scent when a robot is lost', () => {
         const scents = new Set<string>();
@@ -128,7 +147,7 @@ describe('scent tracking', () => {
             direction: 'N',
             instructions: ['F']
         },
-        world,
+        marsGrid,
         scents
         );
 
@@ -145,7 +164,7 @@ describe('scent tracking', () => {
             direction: 'N',
             instructions: ['F', 'R', 'F']
         },
-        world,
+        marsGrid,
         scents
         );
 
@@ -155,6 +174,30 @@ describe('scent tracking', () => {
             direction: 'E',
             lost: false
         });
+    });
+
+    it('does not ignore a dangerous move when the scent direction is different', () => {
+        const scents = new Set<string>(['3,3,N']);
+
+        const result = controlRobot(
+            {
+                x: 5,
+                y: 3,
+                direction: 'E',
+                instructions: ['F']
+            },
+            marsGrid,
+            scents
+        );
+
+        expect(result).toEqual({
+            x: 5,
+            y: 3,
+            direction: 'E',
+            lost: true
+        });
+
+        expect(scents.has('5,3,E')).toBe(true);
     });
 });
 
